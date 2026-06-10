@@ -25,3 +25,25 @@ def create_essay_record(user_id: str, text: str):
 
 def save_essay_to_json(data):
     pass
+
+
+
+
+import os
+import json
+from pathlib import Path
+
+USER_DATA_DIR = Path("data/users")
+USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+def save_user_profile(user_id: str, user_data: dict):
+    file_path = USER_DATA_DIR / f"{user_id}.json"
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(user_data, f, indent=4, ensure_ascii=False)
+
+def load_user_profile(user_id: str) -> dict:
+    file_path = USER_DATA_DIR / f"{user_id}.json"
+    if not file_path.exists():
+        return None
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
