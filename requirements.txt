@@ -1,1 +1,8 @@
+# web-framework
+fastapi
 
+# server to run async code by comm: uvicorn main:app --reload
+uvicorn
+
+# Decoding files that come from Browser. For libs: UploadFile, File(...), Form(...)
+python-multipart 
