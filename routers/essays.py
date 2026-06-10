@@ -1,5 +1,5 @@
 # this part will accept .txt
-# Simple!!! GET data return RESPOnce
+# Simple!!! GET data return RESPONSE
 
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.storage import create_essay_record

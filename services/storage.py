@@ -1,8 +1,32 @@
 import json
-import os
+from pathlib import Path
 from utils.id_generator import generate_uuid
 
-# C R U D --->
+#                       <<<  C R U D  >>>
+
+
+# ================  USER  ==========================
+USER_DATA_DIR = Path("data/users")
+USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def save_user_profile(user_id: str, user_data: dict):
+    file_path = USER_DATA_DIR / f"{user_id}.json"
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(user_data, f, indent=4, ensure_ascii=False)
+
+
+def load_user_profile(user_id: str) -> dict:
+    file_path = USER_DATA_DIR / f"{user_id}.json"
+    if not file_path.exists():
+        return None
+    with open(file_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+# ================  ESSAY  ==========================
+ESSAY_DATA_DIR = Path("data/essays")
+ESSAY_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # CREATE
@@ -14,7 +38,7 @@ def create_essay_record(user_id: str, text: str):
     filename = f"{new_essay_id}.json"
 
     # path to save in (папка data/essays/)
-    filepath = os.path.join("data", "essays", filename)
+    file_path = ESSAY_DATA_DIR / filename
 
     # Forming data structure: JSON
     essay_data = {
@@ -28,7 +52,7 @@ def create_essay_record(user_id: str, text: str):
     # Then will be script to save dict: essay_data to file(DB)...
     print(f"Ready to save in file: {filename}")
 
-    with open(filepath, "w", encoding="utf-8") as f:
+    with open(file_path, "w", encoding="utf-8") as f:
         # dump make Python dict as JSON format and record to file
         json.dump(essay_data, f, ensure_ascii=False, indent=4)
 
@@ -43,15 +67,15 @@ def get_essay(essay_id: str) -> dict:
     """
 
     filename = f"{essay_id}.json"
-    filepath = os.path.join("data", "essays", filename)  # get right path to file
+    file_path = ESSAY_DATA_DIR / filename  # get right path to file
 
     #  Check if file exist
-    if not os.path.exists(filepath):
+    if not file_path.exists():
         print(f"Error: Essay with {essay_id} ID not found")
         return None
 
     try:
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(file_path, "r", encoding="utf-8") as f:
             # json.load takes text from JSON file and turn it to Python ( dict !!!)
             essay_data = json.load(f)
 
@@ -59,7 +83,7 @@ def get_essay(essay_id: str) -> dict:
 
     except json.JSONDecodeError:
         # In case file was corrupted and no longer valid JSON
-        print(f"Error: File {filepath} corrupted!")
+        print(f"Error: File {file_path} corrupted!")
         return None
 
 
