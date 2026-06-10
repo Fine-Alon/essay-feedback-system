@@ -1,0 +1,1 @@
+_ESSAY_MIN_LENGTH = 10
