@@ -4,7 +4,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.storage import create_essay_record
 from constants import _ESSAY_MIN_LENGTH
-from services.storage import load_user_profile
+from services.storage import load_user_profile, get_essay
 
 # In main.py it will be connected by prefix   /essays...
 router = APIRouter()
@@ -30,9 +30,9 @@ async def upload_essay_file(
         )
 
     # Validation: check that file is  .txt format
-    if not file.filename.endswith(".txt"):
+    if not file.filename or not file.filename.endswith(".txt"):
         raise HTTPException(
-            status_code=400, detail="Format is not correct. Allowed  .txt  format only"
+            status_code=400, detail="Format is not correct. Allowed .txt format only"
         )
 
     try:
@@ -41,7 +41,7 @@ async def upload_essay_file(
 
         # Decoding: transform bytes into regular Python str
         # 'utf-8' very important for reading another languages
-        essay_text = file_bytes.decode("utf-8")
+        essay_text = file_bytes.decode("utf-8").replace("\r\n", "\n")
 
         # Check for empty file
         if not essay_text.strip():
@@ -125,3 +125,13 @@ async def upload_essay_text(
         raise HTTPException(
             status_code=500, detail=f"Internal server error occurred: {str(e)}"
         )
+
+
+@router.get("/{essay_id}")
+def get_essay_(essay_id: str):
+    essay_record = get_essay(essay_id)
+    if not essay_record:
+        raise HTTPException(
+            status_code=404, detail=f"Essay with ID {essay_id} not found."
+        )
+    return essay_record
