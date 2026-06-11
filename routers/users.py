@@ -26,20 +26,20 @@ async def register_user(user: UserCreate):
     if load_user_profile(user.username):
         raise HTTPException(status_code=400, detail="Username already taken")
         
-    user_id = generate_short_id() 
+    
     password = user.password 
 
     user_profile = {
-        "user_id": user_id,
+        
         "username": user.username,
         "password": password,
         "email": user.email,
-        "essay_history": [],
+        
         "common_errors": []
     }
     
     save_user_profile(user.username, user_profile)
-    return {"message": "User registered successfully", "user_id": user_id}
+    return {"message": "User registered successfully", "user_name": user.username}
 
 # ==========================================
 # 3. LOGIN ROUTE
@@ -54,7 +54,7 @@ async def login_user(user: UserLogin):
     if user_data["password"] != expected_hash:
         raise HTTPException(status_code=400, detail="Invalid username or password")
         
-    return {"message": "Login successful", "user_id": user_data["user_id"]}
+    return {"message": "Login successful", "user_name": user_data["user_name"]}
 
 # ==========================================
 # 4. PROFILE DASHBOARD ROUTE (Add it here!)
