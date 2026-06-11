@@ -111,10 +111,10 @@ def update_essay_results(essay_id: str, analysis_data: dict) -> bool:
     return True in case of success and False if there is Error.
     """
     filename = f"{essay_id}.json"
-    filepath = os.path.join("data", "essays", filename)
+    filepath = ESSAY_DATA_DIR / filename
 
     # Check if file exists
-    if not os.path.exists(filepath):
+    if not filepath.exists():
         print(f"Update error: Essay with {essay_id} ID not found")
         return False
 
