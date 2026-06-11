@@ -4,6 +4,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.storage import create_essay_record
 from constants import _ESSAY_MIN_LENGTH
+from services.storage import load_user_profile
 
 # In main.py it will be connected by prefix   /essays...
 router = APIRouter()
@@ -19,6 +20,14 @@ async def upload_essay_file(
     Get user ID and file.txt, read it,
     decode to str and send to be saved as JSON.
     """
+
+    # check if user is registered in the system
+    user = load_user_profile(user_id)
+    if user is None:  # check if user is registered in the system
+        raise HTTPException(
+            status_code=404,
+            detail=f"user with ID: {user_id} not found. Please pass registration first!",
+        )
 
     # Validation: check that file is  .txt format
     if not file.filename.endswith(".txt"):
@@ -74,6 +83,14 @@ async def upload_essay_text(
     Endpoint for uploading essay by text field on client side by typing
     Accept user ID and text, then save it
     """
+
+    # check if user is registered in the system
+    user = load_user_profile(user_id)
+    if user is None:  # check if user is registered in the system
+        raise HTTPException(
+            status_code=404,
+            detail=f"user with ID: {user_id} not found. Please pass registration first!",
+        )
 
     # Validation: empty form send check
     clean_text = text.strip()
