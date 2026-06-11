@@ -89,22 +89,6 @@ def get_essay(essay_id: str) -> dict:
         return {}
 
 
-## OREN - usage
-# from services.storage import get_essay
-
-# def analyze_essay_text(essay_id: str):
-## OREN ask for data
-# data = get_essay(essay_id)
-
-# if data is None:
-#   return "No essay found!"
-
-## OREN - get any text by key "original_text"
-# text_to_check = data["original_text"]
-
-## OREN - run any checks
-
-
 # UPDATE
 def update_essay_results(essay_id: str, analysis_data: dict) -> bool:
     """
