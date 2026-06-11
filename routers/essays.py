@@ -23,16 +23,16 @@ async def upload_essay_file(
 
     # check if user is registered in the system
     user = load_user_profile(user_id)
-    if user is None:  # check if user is registered in the system
+    if not user:  # check if user is registered in the system
         raise HTTPException(
             status_code=404,
             detail=f"user with ID: {user_id} not found. Please pass registration first!",
         )
 
     # Validation: check that file is  .txt format
-    if not file.filename.endswith(".txt"):
+    if not file.filename or not file.filename.endswith(".txt"):
         raise HTTPException(
-            status_code=400, detail="Format is not correct. Allowed  .txt  format only"
+            status_code=400, detail="Format is not correct. Allowed .txt format only"
         )
 
     try:
@@ -41,7 +41,7 @@ async def upload_essay_file(
 
         # Decoding: transform bytes into regular Python str
         # 'utf-8' very important for reading another languages
-        essay_text = file_bytes.decode("utf-8")
+        essay_text = file_bytes.decode("utf-8").replace("\r\n", "\n")
 
         # Check for empty file
         if not essay_text.strip():
