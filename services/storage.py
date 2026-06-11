@@ -1,6 +1,8 @@
 import json
+import os
 from pathlib import Path
 from utils.id_generator import generate_uuid
+from services.text_checker import create_report_dic
 
 #                       <<<  C R U D  >>>
 
@@ -19,7 +21,7 @@ def save_user_profile(user_id: str, user_data: dict):
 def load_user_profile(user_id: str) -> dict:
     file_path = USER_DATA_DIR / f"{user_id}.json"
     if not file_path.exists():
-        return None
+        return {}
     with open(file_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -45,8 +47,8 @@ def create_essay_record(user_id: str, text: str):
         "essay_id": new_essay_id,
         "user_id": user_id,
         "original_text": text,
-        "status": "pending",  # PENDING!!!
-        "analysis_results": {},
+        "status": "completed",
+        "analysis_results": create_report_dic(text),
     }
 
     # Then will be script to save dict: essay_data to file(DB)...
@@ -72,7 +74,7 @@ def get_essay(essay_id: str) -> dict:
     #  Check if file exist
     if not file_path.exists():
         print(f"Error: Essay with {essay_id} ID not found")
-        return None
+        return {}
 
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -84,7 +86,7 @@ def get_essay(essay_id: str) -> dict:
     except json.JSONDecodeError:
         # In case file was corrupted and no longer valid JSON
         print(f"Error: File {file_path} corrupted!")
-        return None
+        return {}
 
 
 ## OREN - usage
