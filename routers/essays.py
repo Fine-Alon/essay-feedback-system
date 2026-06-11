@@ -4,7 +4,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.storage import create_essay_record
 from constants import _ESSAY_MIN_LENGTH
-from services.storage import load_user_profile
+from services.storage import load_user_profile, get_essay
 
 # In main.py it will be connected by prefix   /essays...
 router = APIRouter()
@@ -125,3 +125,13 @@ async def upload_essay_text(
         raise HTTPException(
             status_code=500, detail=f"Internal server error occurred: {str(e)}"
         )
+
+
+@router.get("/{essay_id}")
+def get_essay_(essay_id: str):
+    essay_record = get_essay(essay_id)
+    if not essay_record:
+        raise HTTPException(
+            status_code=404, detail=f"Essay with ID {essay_id} not found."
+        )
+    return essay_record

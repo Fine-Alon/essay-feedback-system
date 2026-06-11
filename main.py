@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import users, essays
+from routers import analysis, users, essays
 
 # from routers.essays import router as essays_router
 
@@ -22,6 +22,7 @@ app.add_middleware(
 # Registering routers to the main application
 app.include_router(users.router, prefix="/api/users", tags=["Users"])
 app.include_router(essays.router, prefix="/api/essays", tags=["Essays"])
+app.include_router(analysis.router, prefix="/api/analysis", tags=["Analysis"])
 
 
 @app.get("/")
