@@ -142,7 +142,7 @@
 
   <script>
     // FastAPI URL 
-    const BASE_URL = "http://127.0.0.1:8000"
+    
     let currentUserId = null // Here save ID after login
 
 
@@ -231,7 +231,7 @@
 
       // Because backend use Form(...), so collect data as FormData
       const formData = new FormData()
-      formData.append('user_id', currentUserId)
+      formData.append('user_name', currentUserId)
       formData.append('text', text)
 
       try {
@@ -257,7 +257,7 @@
       if (fileInput.files.length === 0) return showMessage('uploadMessage', 'Choice file!', 'error')
 
       const formData = new FormData()
-      formData.append('user_id', currentUserId)
+      formData.append('user_name', currentUserId)
       formData.append('file', fileInput.files[0])
 
       try {

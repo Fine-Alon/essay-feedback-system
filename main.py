@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import users, essays, analysis
+from routers import analysis, users, essays
 
 # from routers.essays import router as essays_router
 

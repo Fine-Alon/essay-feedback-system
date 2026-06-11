@@ -6,7 +6,7 @@ from services.text_checker import create_report_dic
 # ייבוא של פונקציות השמירה והקריאה של אלון
 from services.storage import update_essay_results, get_essay
 
-router = APIRouter(prefix="/analysis", tags=["analysis"])
+router = APIRouter()
 
 
 @router.get("/essay/{essay_id}")
@@ -28,4 +28,4 @@ def get_essay_analysis_report(essay_id: str):
         return essay_record["analysis_results"]
 
     update_essay_results(essay_id, create_report_dic(essay_record["original_text"]))
-    return essay_record["analysis_results"]
+    return get_essay(essay_id)["analysis_results"]

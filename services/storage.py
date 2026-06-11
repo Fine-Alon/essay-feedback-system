@@ -12,14 +12,14 @@ USER_DATA_DIR = Path("data/users")
 USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def save_user_profile(user_id: str, user_data: dict):
-    file_path = USER_DATA_DIR / f"{user_id}.json"
+def save_user_profile(user_name: str, user_data: dict):
+    file_path = USER_DATA_DIR / f"{user_name}.json"
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(user_data, f, indent=4, ensure_ascii=False)
 
 
-def load_user_profile(user_id: str) -> dict:
-    file_path = USER_DATA_DIR / f"{user_id}.json"
+def load_user_profile(user_name: str) -> dict:
+    file_path = USER_DATA_DIR / f"{user_name}.json"
     if not file_path.exists():
         return {}
     with open(file_path, "r", encoding="utf-8") as f:
@@ -32,7 +32,7 @@ ESSAY_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # CREATE
-def create_essay_record(user_id: str, text: str):
+def create_essay_record(user_name: str, text: str):
     # generate ID for new essay
     new_essay_id = generate_uuid()
 
@@ -45,7 +45,7 @@ def create_essay_record(user_id: str, text: str):
     # Forming data structure: JSON
     essay_data = {
         "essay_id": new_essay_id,
-        "user_id": user_id,
+        "user_name": user_name,
         "original_text": text,
         "status": "completed",
         "analysis_results": create_report_dic(text),
@@ -87,22 +87,6 @@ def get_essay(essay_id: str) -> dict:
         # In case file was corrupted and no longer valid JSON
         print(f"Error: File {file_path} corrupted!")
         return {}
-
-
-## OREN - usage
-# from services.storage import get_essay
-
-# def analyze_essay_text(essay_id: str):
-## OREN ask for data
-# data = get_essay(essay_id)
-
-# if data is None:
-#   return "No essay found!"
-
-## OREN - get any text by key "original_text"
-# text_to_check = data["original_text"]
-
-## OREN - run any checks
 
 
 # UPDATE

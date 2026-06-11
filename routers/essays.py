@@ -4,7 +4,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
 from services.storage import create_essay_record
 from constants import _ESSAY_MIN_LENGTH
-from services.storage import load_user_profile
+from services.storage import load_user_profile, get_essay
 
 # In main.py it will be connected by prefix   /essays...
 router = APIRouter()
@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.post("/upload/file")
 async def upload_essay_file(
-    user_id: str = Form(...),  # get user ID out of form
+    user_name: str = Form(...),  # get user ID out of form
     file: UploadFile = File(...),  # get file out of form
 ):
     """
@@ -22,11 +22,11 @@ async def upload_essay_file(
     """
 
     # check if user is registered in the system
-    user = load_user_profile(user_id)
+    user = load_user_profile(user_name)
     if not user:  # check if user is registered in the system
         raise HTTPException(
             status_code=404,
-            detail=f"user with ID: {user_id} not found. Please pass registration first!",
+            detail=f"user with ID: {user_name} not found. Please pass registration first!",
         )
 
     # Validation: check that file is  .txt format
@@ -51,7 +51,7 @@ async def upload_essay_file(
             )
 
         # Saving: function call, to create JSON file
-        essay_id = create_essay_record(user_id=user_id, text=essay_text)
+        essay_id = create_essay_record(user_name=user_name, text=essay_text)
 
         # Client answer: return status SUCCESS and essay ID
         return {
@@ -76,7 +76,7 @@ async def upload_essay_file(
 
 @router.post("/upload/text")
 async def upload_essay_text(
-    user_id: str = Form(...),  # get user ID
+    user_name: str = Form(...),  # get user ID
     text: str = Form(...),  # get text out of form
 ):
     """
@@ -85,11 +85,11 @@ async def upload_essay_text(
     """
 
     # check if user is registered in the system
-    user = load_user_profile(user_id)
+    user = load_user_profile(user_name)
     if user is None:  # check if user is registered in the system
         raise HTTPException(
             status_code=404,
-            detail=f"user with ID: {user_id} not found. Please pass registration first!",
+            detail=f"user with ID: {user_name} not found. Please pass registration first!",
         )
 
     # Validation: empty form send check
@@ -110,7 +110,7 @@ async def upload_essay_text(
 
     try:
         # Saving
-        essay_id = create_essay_record(user_id=user_id, text=clean_text)
+        essay_id = create_essay_record(user_name=user_name, text=clean_text)
 
         # Response to client
         return {
@@ -125,3 +125,13 @@ async def upload_essay_text(
         raise HTTPException(
             status_code=500, detail=f"Internal server error occurred: {str(e)}"
         )
+
+
+@router.get("/{essay_id}")
+def get_essay_(essay_id: str):
+    essay_record = get_essay(essay_id)
+    if not essay_record:
+        raise HTTPException(
+            status_code=404, detail=f"Essay with ID {essay_id} not found."
+        )
+    return essay_record
