@@ -23,7 +23,7 @@ async def upload_essay_file(
 
     # check if user is registered in the system
     user = load_user_profile(user_name)
-    if user is None:  # check if user is registered in the system
+    if not user:  # check if user is registered in the system
         raise HTTPException(
             status_code=404,
             detail=f"user with ID: {user_name} not found. Please pass registration first!",
