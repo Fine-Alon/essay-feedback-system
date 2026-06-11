@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Essay checking system</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #eee;
+      margin: 20px 0;
+    }
+
+    .success {
+      color: green;
+      text-align: center;
+    }
+
+    .error {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="authScreen" class="container">
+    <h2>Login / Register</h2>
+
+    <h3>Account exists?</h3>
+    <input type="text" id="loginUsername" placeholder="user name">
+    <input type="password" id="loginPassword" placeholder="Password">
+    <button onclick="loginUser()">Login</button>
+
+    <hr>
+
+    <h3>New user?</h3>
+    <input type="text" id="regUsername" placeholder="user name">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password">
+    <button onclick="registerUser()" style="background-color: #28a745;">Register</button>
+
+    <p id="authMessage"></p>
+  </div>
+
+  <div id="dashboardScreen" class="container hidden">
+    <h2>Welcome, <span id="displayUsername" style="color: #28a745;"></span>!</h2>
+
+    <div style="background: #e9ecef; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+      <strong>Your profile:</strong>
+      <p style="margin: 5px 0;">ID: <span id="displayUserId"></span></p>
+      <p style="margin: 5px 0;">Email: <span id="displayEmail"></span></p>
+    </div>
+
+    <button onclick="logout()" style="background-color: #dc3545; margin-bottom: 20px;">Logout account</button>
+    <hr>
+
+    <h3>Method 1: Enter text</h3>
+    <textarea id="essayText" rows="6" placeholder="Put your essay here..."></textarea>
+    <button onclick="uploadText()">Send text</button>
+
+    <hr>
+
+    <h3>Method 2: Upload .txt file</h3>
+    <input type="file" id="essayFile" accept=".txt">
+    <button onclick="uploadFile()">Send file</button>
+
+    <p id="uploadMessage"></p>
+  </div>
+
+  <script>
+    // FastAPI URL 
+    const BASE_URL = "http://127.0.0.1:8000"
+    let currentUserId = null // Here save ID after login
+
+
+    // --- AUTHORIZATION FUNCTIONS ---
+
+    async function registerUser() {
+      const username = document.getElementById('regUsername').value
+      const email = document.getElementById('regEmail').value
+      const password = document.getElementById('regPassword').value
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/users/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, email, password })
+        })
+        const data = await response.json()
+
+        if (response.ok) {
+          showMessage('authMessage', 'Registration success! You can login now.', 'success')
+        } else {
+          showMessage('authMessage', 'Error: ' + (data.detail || 'Registration failed'), 'error')
+        }
+      } catch (e) {
+        showMessage('authMessage', 'network connection error', 'error')
+      }
+    }
+
+    async function loginUser() {
+      const username = document.getElementById('loginUsername').value
+      const password = document.getElementById('loginPassword').value
+
+      try {
+        // Request Login
+        const loginResponse = await fetch(`${BASE_URL}/api/users/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        })
+        const loginData = await loginResponse.json()
+
+        if (loginResponse.ok) {
+          currentUserId = username // Save user name for next use
+
+          // Immediately: Ask for profile data
+          const profileResponse = await fetch(`${BASE_URL}/api/users/profile/${username}`)
+
+          if (profileResponse.ok) {
+            const profileData = await profileResponse.json()
+
+            // Fulfil interface by data from server
+            document.getElementById('displayUsername').innerText = profileData.username || username
+            document.getElementById('displayEmail').innerText = profileData.email || 'No email for user'
+            document.getElementById('displayUserId').innerText = username
+
+            // Переключаем экраны
+            document.getElementById('authScreen').classList.add('hidden')
+            document.getElementById('dashboardScreen').classList.remove('hidden')
+            showMessage('authMessage', '', '') // Clean errors
+          } else {
+            showMessage('authMessage', 'Login success , profile loading error', 'error')
+          }
+        } else {
+          showMessage('authMessage', 'Login error: ' + (loginData.detail || 'wrong data'), 'error')
+        }
+      } catch (e) {
+        showMessage('authMessage', 'Server connection error', 'error')
+      }
+    }
+
+    function logout() {
+      currentUserId = null
+      document.getElementById('authScreen').classList.remove('hidden')
+      document.getElementById('dashboardScreen').classList.add('hidden')
+      document.getElementById('essayText').value = ''
+      document.getElementById('essayFile').value = ''
+      showMessage('authMessage', '', '')
+      showMessage('uploadMessage', '', '')
+    }
+
+    // --- Upload essay functions ---
+
+    async function uploadText() {
+      const text = document.getElementById('essayText').value
+      if (!text) return showMessage('uploadMessage', 'Empty text!', 'error')
+
+      // Because backend use Form(...), so collect data as FormData
+      const formData = new FormData()
+      formData.append('user_id', currentUserId)
+      formData.append('text', text)
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/essays/upload/text`, {
+          method: 'POST',
+          body: formData
+        })
+        const data = await response.json()
+
+        if (response.ok) {
+          showMessage('uploadMessage', `Success! essay ID: ${data.essay_id}`, 'success')
+          document.getElementById('essayText').value = '' // Clean field
+        } else {
+          showMessage('uploadMessage', 'Error: ' + data.detail, 'error')
+        }
+      } catch (e) {
+        showMessage('uploadMessage', 'Server error', 'error')
+      }
+    }
+
+    async function uploadFile() {
+      const fileInput = document.getElementById('essayFile')
+      if (fileInput.files.length === 0) return showMessage('uploadMessage', 'Choice file!', 'error')
+
+      const formData = new FormData()
+      formData.append('user_id', currentUserId)
+      formData.append('file', fileInput.files[0])
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/essays/upload/file`, {
+          method: 'POST',
+          body: formData
+        })
+        const data = await response.json()
+
+        if (response.ok) {
+          showMessage('uploadMessage', `Success! File was uploaded. ID: ${data.essay_id}`, 'success')
+          fileInput.value = '' // Clean field
+        } else {
+          showMessage('uploadMessage', 'Error: ' + data.detail, 'error')
+        }
+      } catch (e) {
+        showMessage('uploadMessage', 'Server error', 'error')
+      }
+    }
+
+    // Helper fnc: to show messages
+    function showMessage(elementId, text, className) {
+      const el = document.getElementById(elementId)
+      el.innerText = text
+      el.className = className
+    }
+  </script>
+
+</body>
+
+</html>
