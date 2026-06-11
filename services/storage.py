@@ -10,14 +10,14 @@ USER_DATA_DIR = Path("data/users")
 USER_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def save_user_profile(user_id: str, user_data: dict):
-    file_path = USER_DATA_DIR / f"{user_id}.json"
+def save_user_profile(user_name: str, user_data: dict):
+    file_path = USER_DATA_DIR / f"{user_name}.json"
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(user_data, f, indent=4, ensure_ascii=False)
 
 
-def load_user_profile(user_id: str) -> dict:
-    file_path = USER_DATA_DIR / f"{user_id}.json"
+def load_user_profile(user_name: str) -> dict:
+    file_path = USER_DATA_DIR / f"{user_name}.json"
     if not file_path.exists():
         return None
     with open(file_path, "r", encoding="utf-8") as f:
@@ -30,7 +30,7 @@ ESSAY_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 # CREATE
-def create_essay_record(user_id: str, text: str):
+def create_essay_record(user_name: str, text: str):
     # generate ID for new essay
     new_essay_id = generate_uuid()
 
@@ -43,7 +43,7 @@ def create_essay_record(user_id: str, text: str):
     # Forming data structure: JSON
     essay_data = {
         "essay_id": new_essay_id,
-        "user_id": user_id,
+        "user_name": user_name,
         "original_text": text,
         "status": "pending",  # PENDING!!!
         "analysis_results": {},

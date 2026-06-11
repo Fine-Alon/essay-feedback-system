@@ -1,0 +1,21 @@
+{
+    "essay_id": "9918579a-2b76-4188-94a8-c09cdbf0b66b",
+    "user_name": "omri",
+    "original_text": "1234123412341234",
+    "status": "completed",
+    "analysis_results": {
+        "general_metrics": {
+            "total_words": 1,
+            "total_paragraphs": 1,
+            "meets_minimum_length": false
+        },
+        "structural_issues_counters": {
+            "double_spaces": 0,
+            "missing_space_after_punctuation": 0,
+            "space_before_punctuation": 0,
+            "empty_lines": 0,
+            "missing_paragraph_punctuation": 1
+        },
+        "repeated_words_analysis": {}
+    }
+}
