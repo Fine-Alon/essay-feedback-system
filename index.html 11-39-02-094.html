@@ -115,6 +115,28 @@
     <input type="file" id="essayFile" accept=".txt">
     <button onclick="uploadFile()">Send file</button>
 
+    <hr>
+
+    <h3>Check status / Report</h3>
+    <input type="text" id="searchEssayId" placeholder="Put essay ID here...">
+    <button onclick="fetchReport()" style="background-color: #17a2b8;">Get report</button>
+
+    <div id="reportContainer" class="hidden"
+      style="margin-top: 20px; background: #fff; padding: 15px; border: 1px solid #ccc; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+      <h4 style="margin-top: 0;">Essay report</h4>
+      <p><strong>ID:</strong> <span id="reportEssayId" style="font-family: monospace;"></span></p>
+      <p><strong>Status:</strong> <span id="reportStatus" style="font-weight: bold;"></span></p>
+
+      <p><strong>Your text:</strong></p>
+      <blockquote id="reportText"
+        style="font-style: italic; background: #f8f9fa; padding: 10px; border-left: 4px solid #adb5bd; margin: 0 0 15px 0; max-height: 150px; overflow-y: auto;">
+      </blockquote>
+
+      <p><strong>Errors and recommendations:</strong></p>
+      <pre id="reportAnalysis"
+        style="background: #212529; color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto;"></pre>
+    </div>
+
     <p id="uploadMessage"></p>
   </div>
 
@@ -253,6 +275,47 @@
         }
       } catch (e) {
         showMessage('uploadMessage', 'Server error', 'error')
+      }
+    }
+
+    async function fetchReport() {
+      const essayId = document.getElementById('searchEssayId').value.trim()
+      if (!essayId) return showMessage('uploadMessage', 'Please enter essay ID!', 'error')
+
+      try {
+        const response = await fetch(`${BASE_URL}/api/analysis/essay/${essayId}`)
+        const data = await response.json()
+
+        if (response.ok) {
+          // Show hidden block with report
+          document.getElementById('reportContainer').classList.remove('hidden')
+
+          // Fill data
+          document.getElementById('reportEssayId').innerText = data.essay_id
+
+          // Status styling
+          const statusEl = document.getElementById('reportStatus')
+
+          if (data.status === 'completed') {
+            statusEl.innerText = '✅ Checked (Completed)'
+            statusEl.style.color = 'green'
+          } else {
+            statusEl.innerText = '⏳ In line for inspection (Pending)'
+            statusEl.style.color = 'orange'
+          }
+
+          document.getElementById('reportText').innerText = data.original_text
+
+          // Show analyze results 
+          document.getElementById('reportAnalysis').innerText = JSON.stringify(data.analysis_results, null, 2)
+
+          showMessage('uploadMessage', '', '') // Cleanup error messages
+        } else {
+          document.getElementById('reportContainer').classList.add('hidden')
+          showMessage('uploadMessage', 'Error: ' + (data.detail || 'Report not found'), 'error')
+        }
+      } catch (e) {
+        showMessage('uploadMessage', 'Server connection error', 'error')
       }
     }
 
