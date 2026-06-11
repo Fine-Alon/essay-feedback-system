@@ -1,6 +1,8 @@
 import re
 from collections import Counter
 
+from constants import _ESSAY_MIN_LENGTH, _REPEATED_WORDS_THRESHOLD
+
 
 # פונקציה שסופרת את כמות המילים במאמר
 def words_count(essay: str) -> int:
@@ -10,7 +12,7 @@ def words_count(essay: str) -> int:
 
 
 # פונקציה שבודקת האם המאמר עומד באורך המינימלי הנדרש
-def min_words_check(essay: str, min_words: int) -> bool:
+def min_words_check(essay: str, min_words: int = _ESSAY_MIN_LENGTH) -> bool:
     return words_count(essay) >= min_words
 
 
@@ -35,7 +37,7 @@ def get_word_segmentation(essay: str) -> dict:
 
 
 # פונקציה שמזהה מילים שחוזרות על עצמן יותר מדי פעמים
-def find_repeated_words(essay: str, threshold: int = 4) -> dict:
+def find_repeated_words(essay: str, threshold: int = _REPEATED_WORDS_THRESHOLD) -> dict:
     all_words = get_word_segmentation(essay)
     repeated = {}
     for word, count in all_words.items():
@@ -90,7 +92,7 @@ def create_report_dic(text: str) -> dict:
         "general_metrics": {
             "total_words": words_count(text),
             "total_paragraphs": paragraphs_count(text),
-            "meets_minimum_length": min_words_check(text, 100),
+            "meets_minimum_length": min_words_check(text),
         },
         "structural_issues_counters": {
             "double_spaces": check_double_spaces(text),
@@ -101,5 +103,5 @@ def create_report_dic(text: str) -> dict:
             "empty_lines": check_empty_lines(text),
             "missing_paragraph_punctuation": check_missing_paragraph_punctuation(text),
         },
-        "repeated_words_analysis": find_repeated_words(text, 4),
+        "repeated_words_analysis": find_repeated_words(text),
     }
