@@ -127,14 +127,16 @@
       <p><strong>ID:</strong> <span id="reportEssayId" style="font-family: monospace;"></span></p>
       <p><strong>Status:</strong> <span id="reportStatus" style="font-weight: bold;"></span></p>
 
-      <p><strong>Your text:</strong></p>
+      <p><strong>What done:</strong></p>
       <blockquote id="reportText"
         style="font-style: italic; background: #f8f9fa; padding: 10px; border-left: 4px solid #adb5bd; margin: 0 0 15px 0; max-height: 150px; overflow-y: auto;">
       </blockquote>
 
       <p><strong>Errors and recommendations:</strong></p>
-      <pre id="reportAnalysis"
-        style="background: #212529; color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto;"></pre>
+      <div id="reportAnalysis"
+        style="background: #212529; color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto;">
+      </div>
+
     </div>
 
     <p id="uploadMessage"></p>
@@ -142,7 +144,8 @@
 
   <script>
     // FastAPI URL 
-    
+    const BASE_URL = "http://127.0.0.1:8000"
+
     let currentUserId = null // Here save ID after login
 
 
@@ -287,29 +290,50 @@
         const data = await response.json()
 
         if (response.ok) {
-          // Show hidden block with report
           document.getElementById('reportContainer').classList.remove('hidden')
 
-          // Fill data
-          document.getElementById('reportEssayId').innerText = data.essay_id
+          // 1. Get ID from the input (since the backend no longer sends it)
+          document.getElementById('reportEssayId').innerText = essayId
 
-          // Status styling
+          // 2. Hardcode the status (if data is received, it means it's checked)
           const statusEl = document.getElementById('reportStatus')
+          statusEl.innerText = '✅ Completed'
+          statusEl.style.color = 'green'
 
-          if (data.status === 'completed') {
-            statusEl.innerText = '✅ Checked (Completed)'
-            statusEl.style.color = 'green'
-          } else {
-            statusEl.innerText = '⏳ In line for inspection (Pending)'
-            statusEl.style.color = 'orange'
+          // 3. Original text is no longer returned, so we use a placeholder
+          document.getElementById('reportText').innerText = "The text was successfully analyzed by the algorithm."
+
+          // 4. Nicely format the most important data from the report
+          let reportHtml = `
+                    <h4 style="margin-bottom: 5px; color: #17a2b8;">📊 General Metrics:</h4>
+                    <ul style="margin-top: 0;">
+                        <li>Total words: <b>${data.general_metrics?.total_words || 0}</b></li>
+                        <li>Total paragraphs: <b>${data.general_metrics?.total_paragraphs || 0}</b></li>
+                        <li>Meets minimum length: <b>${data.general_metrics?.meets_minimum_length ? '✅ Yes' : '❌ No'}</b></li>
+                    </ul>
+
+                    <h4 style="margin-bottom: 5px; color: #dc3545;">⚠️ Structural Issues:</h4>
+                    <ul style="margin-top: 0;">
+                        <li>Double spaces: <b>${data.structural_issues_counters?.double_spaces || 0}</b></li>
+                        <li>Missing paragraph punctuation: <b>${data.structural_issues_counters?.missing_paragraph_punctuation || 0}</b></li>
+                        <li>Missing space after punctuation: <b>${data.structural_issues_counters?.missing_space_after_punctuation || 0}</b></li>
+                        <li>Extra space before punctuation: <b>${data.structural_issues_counters?.space_before_punctuation || 0}</b></li>
+                    </ul>
+                `
+
+          // Add repeated words analysis if it exists
+          if (data.repeated_words_analysis) {
+            reportHtml += `<h4 style="margin-bottom: 5px; color: #ffc107;">🔁 Repeated Words:</h4><p style="margin-top: 0;">`
+            for (const [word, count] of Object.entries(data.repeated_words_analysis)) {
+              reportHtml += `<span style="display: inline-block; background: #343a40; padding: 2px 8px; border-radius: 12px; margin: 2px; font-size: 0.9em;">${word} <span style="color: #17a2b8;">(${count})</span></span>`
+            }
+            reportHtml += `</p>`
           }
 
-          document.getElementById('reportText').innerText = data.original_text
+          // Insert the generated HTML into our block
+          document.getElementById('reportAnalysis').innerHTML = reportHtml
 
-          // Show analyze results 
-          document.getElementById('reportAnalysis').innerText = JSON.stringify(data.analysis_results, null, 2)
-
-          showMessage('uploadMessage', '', '') // Cleanup error messages
+          showMessage('uploadMessage', '', '')
         } else {
           document.getElementById('reportContainer').classList.add('hidden')
           showMessage('uploadMessage', 'Error: ' + (data.detail || 'Report not found'), 'error')
