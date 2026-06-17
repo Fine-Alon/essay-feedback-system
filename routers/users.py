@@ -1,28 +1,18 @@
 from fastapi import APIRouter, HTTPException, status
-from pydantic import BaseModel
 from typing import List
 from services.storage import save_user_profile, load_user_profile
 from utils.id_generator import generate_short_id
+
+# =========================================================
+# CALLING THE MODELS DIRECTLY FROM YOUR MODELS FOLDER HERE
+# =========================================================
+from models.users import UserCreate, UserLogin
 
 router = APIRouter()
 
 
 # ==========================================
-# 1. DATA SCHEMAS
-# ==========================================
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: str
-
-
-class UserLogin(BaseModel):
-    username: str
-    password: str
-
-
-# ==========================================
-# 2. REGISTRATION ROUTE
+# 1. REGISTRATION ROUTE
 # ==========================================
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register_user(user: UserCreate):
@@ -43,7 +33,7 @@ async def register_user(user: UserCreate):
 
 
 # ==========================================
-# 3. LOGIN ROUTE
+# 2. LOGIN ROUTE
 # ==========================================
 @router.post("/login")
 async def login_user(user: UserLogin):
@@ -59,7 +49,7 @@ async def login_user(user: UserLogin):
 
 
 # ==========================================
-# 4. PROFILE DASHBOARD ROUTE (Add it here!)
+# 3. PROFILE DASHBOARD ROUTE
 # ==========================================
 @router.get("/profile/{username}")
 async def get_profile(username: str):
