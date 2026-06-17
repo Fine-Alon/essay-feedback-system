@@ -286,10 +286,15 @@
       if (!essayId) return showMessage('uploadMessage', 'Please enter essay ID!', 'error')
 
       try {
-        const response = await fetch(`${BASE_URL}/api/analysis/essay/${essayId}`)
-        const data = await response.json()
+        // Ask Analysis Rout.
+        const reportResponse = await fetch(`${BASE_URL}/api/analysis/essay/${essayId}`)
+        const reportData = await reportResponse.json()
 
-        if (response.ok) {
+        // Ask Essay Rout.
+        const textResponse = await fetch(`${BASE_URL}/api/essays/${essayId}`)
+        const textData = await textResponse.json()
+
+        if (reportResponse.ok && textResponse.ok) {
           document.getElementById('reportContainer').classList.remove('hidden')
 
           // 1. Get ID from the input (since the backend no longer sends it)
@@ -301,30 +306,35 @@
           statusEl.style.color = 'green'
 
           // 3. Original text is no longer returned, so we use a placeholder
-          document.getElementById('reportText').innerText = "The text was successfully analyzed by the algorithm."
+          const textContainer = document.getElementById('reportText')
+          textContainer.innerText = textData.original_text || "Text not found."
+          textContainer.style.background = "#2b3035"
+          textContainer.style.color = "#f8f9fa" // (light gray/white text)
+          textContainer.style.padding = "15px"
+          textContainer.style.borderLeft = "4px solid #17a2b8"
+          textContainer.style.fontStyle = "italic"
+          textContainer.style.whiteSpace = "pre-wrap"
 
-          // 4. Nicely format the most important data from the report
           let reportHtml = `
-                    <h4 style="margin-bottom: 5px; color: #17a2b8;">📊 General Metrics:</h4>
-                    <ul style="margin-top: 0;">
-                        <li>Total words: <b>${data.general_metrics?.total_words || 0}</b></li>
-                        <li>Total paragraphs: <b>${data.general_metrics?.total_paragraphs || 0}</b></li>
-                        <li>Meets minimum length: <b>${data.general_metrics?.meets_minimum_length ? '✅ Yes' : '❌ No'}</b></li>
-                    </ul>
+              <h4 style="margin-bottom: 5px; color: #17a2b8;">📊 General Metrics:</h4>
+              <ul style="margin-top: 0;">
+                  <li>Total words: <b>${reportData.general_metrics?.total_words || 0}</b></li>
+                  <li>Total paragraphs: <b>${reportData.general_metrics?.total_paragraphs || 0}</b></li>
+                  <li>Meets minimum length: <b>${reportData.general_metrics?.meets_minimum_length ? '✅ Yes' : '❌ No'}</b></li>
+              </ul>
 
-                    <h4 style="margin-bottom: 5px; color: #dc3545;">⚠️ Structural Issues:</h4>
-                    <ul style="margin-top: 0;">
-                        <li>Double spaces: <b>${data.structural_issues_counters?.double_spaces || 0}</b></li>
-                        <li>Missing paragraph punctuation: <b>${data.structural_issues_counters?.missing_paragraph_punctuation || 0}</b></li>
-                        <li>Missing space after punctuation: <b>${data.structural_issues_counters?.missing_space_after_punctuation || 0}</b></li>
-                        <li>Extra space before punctuation: <b>${data.structural_issues_counters?.space_before_punctuation || 0}</b></li>
-                    </ul>
-                `
-
+              <h4 style="margin-bottom: 5px; color: #dc3545;">⚠️ Structural Issues:</h4>
+              <ul style="margin-top: 0;">
+                  <li>Double spaces: <b>${reportData.structural_issues_counters?.double_spaces || 0}</b></li>
+                  <li>Missing paragraph punctuation: <b>${reportData.structural_issues_counters?.missing_paragraph_punctuation || 0}</b></li>
+                  <li>Missing space after punctuation: <b>${reportData.structural_issues_counters?.missing_space_after_punctuation || 0}</b></li>
+                  <li>Extra space before punctuation: <b>${reportData.structural_issues_counters?.space_before_punctuation || 0}</b></li>
+              </ul>
+          `
           // Add repeated words analysis if it exists
-          if (data.repeated_words_analysis) {
+          if (textData.repeated_words_analysis) {
             reportHtml += `<h4 style="margin-bottom: 5px; color: #ffc107;">🔁 Repeated Words:</h4><p style="margin-top: 0;">`
-            for (const [word, count] of Object.entries(data.repeated_words_analysis)) {
+            for (const [word, count] of Object.entries(textData.repeated_words_analysis)) {
               reportHtml += `<span style="display: inline-block; background: #343a40; padding: 2px 8px; border-radius: 12px; margin: 2px; font-size: 0.9em;">${word} <span style="color: #17a2b8;">(${count})</span></span>`
             }
             reportHtml += `</p>`
@@ -336,9 +346,10 @@
           showMessage('uploadMessage', '', '')
         } else {
           document.getElementById('reportContainer').classList.add('hidden')
-          showMessage('uploadMessage', 'Error: ' + (data.detail || 'Report not found'), 'error')
+          showMessage('uploadMessage', 'Error: ' + (textData.detail || 'Report not found'), 'error')
         }
       } catch (e) {
+        console.error("The real error is:", e) // This prints the true error to the Console
         showMessage('uploadMessage', 'Server connection error', 'error')
       }
     }
