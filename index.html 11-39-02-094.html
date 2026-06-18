@@ -106,13 +106,28 @@
     <hr>
 
     <h3>Method 1: Enter text</h3>
-    <textarea id="essayText" rows="6" placeholder="Put your essay here..."></textarea>
+    <!-- <textarea id="essayText" rows="6" placeholder="Put your essay here..."></textarea> -->
+    <div style="margin-bottom: 10px;">
+      <textarea id="essayText" rows="6" placeholder="Put your essay here..."></textarea>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 10px;">
+      <span id="textUploadIdDisplay" style="color: #28a745; font-weight: bold; font-size: 0.9em;"></span>
+    </div>
+
     <button onclick="uploadText()">Send text</button>
 
     <hr>
 
     <h3>Method 2: Upload .txt file</h3>
-    <input type="file" id="essayFile" accept=".txt">
+    <div style="margin-bottom: 10px;">
+      <input type="file" id="essayFile" accept=".txt">
+    </div>
+
+    <div style="text-align: center; margin-bottom: 10px;">
+      <span id="fileUploadIdDisplay" style="color: #28a745; font-weight: bold; font-size: 0.9em;"></span>
+    </div>
+    <!-- <input type="file" id="essayFile" accept=".txt"> -->
     <button onclick="uploadFile()">Send file</button>
 
     <hr>
@@ -246,12 +261,30 @@
 
         if (response.ok) {
           showMessage('uploadMessage', `Success! essay ID: ${data.essay_id}`, 'success')
+
+          // show ID above send btn
+          const idDisplay = document.getElementById('textUploadIdDisplay')
+          idDisplay.innerText = `Saved! Essay ID: ${data.essay_id}`
+
+          // Autofill: put the ID into report field!
+          const searchInput = document.getElementById('searchEssayId')
+          if (searchInput) {
+            searchInput.value = data.essay_id
+
+            // styles: emphasize field
+            searchInput.style.transition = "box-shadow 0.3s"
+            searchInput.style.boxShadow = "0 0 8px #17a2b8"
+            setTimeout(() => searchInput.style.boxShadow = "none", 1500)
+          }
+
           document.getElementById('essayText').value = '' // Clean field
         } else {
           showMessage('uploadMessage', 'Error: ' + data.detail, 'error')
+          document.getElementById('textUploadIdDisplay').innerText = '' // Очищаем старый ID при ошибке
         }
       } catch (e) {
         showMessage('uploadMessage', 'Server error', 'error')
+        document.getElementById('textUploadIdDisplay').innerText = '' // Очищаем старый ID при ошибке
       }
     }
 
@@ -270,9 +303,27 @@
         })
         const data = await response.json()
 
+
         if (response.ok) {
           showMessage('uploadMessage', `Success! File was uploaded. ID: ${data.essay_id}`, 'success')
+
+          // show ID above send btn
+          const idDisplay = document.getElementById('fileUploadIdDisplay')
+          idDisplay.innerText = `Saved! Essay ID: ${data.essay_id}`
+
           fileInput.value = '' // Clean field
+
+          // Autofill: put the ID into report field!
+          const searchInput = document.getElementById('searchEssayId')
+          if (searchInput) {
+            searchInput.value = data.essay_id
+
+            // styles: emphasize field
+            searchInput.style.transition = "box-shadow 0.3s"
+            searchInput.style.boxShadow = "0 0 8px #17a2b8"
+            setTimeout(() => searchInput.style.boxShadow = "none", 1500)
+          }
+
         } else {
           showMessage('uploadMessage', 'Error: ' + data.detail, 'error')
         }
