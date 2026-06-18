@@ -54,7 +54,7 @@ async def login_user(user: UserLogin):
     if user_data["password"] != expected_hash:
         raise HTTPException(status_code=400, detail="Invalid username or password")
         
-    return {"message": "Login successful", "user_name": user_data["user_name"]}
+    return {"message": "Login successful", "user_name": user_data["username"]}
 
 # ==========================================
 # 4. PROFILE DASHBOARD ROUTE (Add it here!)
