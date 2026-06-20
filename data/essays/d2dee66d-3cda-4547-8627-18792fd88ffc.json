@@ -1,0 +1,31 @@
+{
+    "essay_id": "d2dee66d-3cda-4547-8627-18792fd88ffc",
+    "user_name": "rrr",
+    "original_text": "The Impact of Modern Technologies on Reading Culture\n\nModern technologies have \n\nradically changed our lives. Life has become much faster, and this has directly affected how we read books. In the past, people spent long hours in libraries, enjoying the rustle of paper pages. Today, the absolute majority prefers electronic formats or audiobooks, which can be listened to right on the go on the way to work.\n\nOn the one hand, the incredible accessibility of information is a huge plus. At any given moment, a person can download a desired work and immediately start reading. Reading has become much more convenient, because a smartphone or tablet is always at hand. However, this phenomenon also has a flip side. Due to the colossal a  ,, .bundance of information and constant notifications, our concentration is rapidly declining. Concentrating on long, complex texts is becoming harder and harder. We are used to short posts on social networks, so classic multi-page novels often seem too drawn out to.. the modern reader.,\n\nFurthermore, regular reading from a screen negatively affects vision. Eyes get tired quite quickly from the bright light of the display, which makes the long process of reading less comfortable and more tiring.",
+    "status": "completed",
+    "analysis_results": {
+        "general_metrics": {
+            "total_words": 200,
+            "total_paragraphs": 5,
+            "meets_minimum_length": true
+        },
+        "structural_issues_counters": {
+            "double_spaces": 1,
+            "missing_space_after_punctuation": 1,
+            "space_before_punctuation": 2,
+            "empty_lines": 0,
+            "missing_paragraph_punctuation": 3
+        },
+        "repeated_words_analysis": {
+            "the": 13,
+            "of": 6,
+            "on": 6,
+            "reading": 5,
+            "has": 4,
+            "and": 5,
+            "to": 5,
+            "is": 4,
+            "a": 7
+        }
+    }
+}

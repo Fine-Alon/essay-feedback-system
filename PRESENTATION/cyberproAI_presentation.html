@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberPro Essay Feedback System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
+            /* Slate 50 */
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            /* Slate 800 with opacity */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="h-screen w-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="w-full p-6 flex justify-between items-center absolute top-0 z-10">
+        <div class="flex items-center gap-2 text-cyan-400 font-bold text-xl tracking-wider">
+            <i data-lucide="shield-check" class="w-6 h-6"></i>
+            CYBERPRO
+        </div>
+        <div class="text-slate-400 text-sm">Project Presentation O.A.O team</div>
+    </header>
+
+    <!-- Slides Container -->
+    <main id="presentation-container"
+        class="flex-grow flex items-center justify-center p-12 relative h-full w-full mt-8">
+
+        <!-- Slide 0: Title -->
+        <div class="slide active flex-col items-center text-center max-w-4xl w-full" id="slide-0">
+            <div
+                class="w-24 h-24 bg-cyan-500 rounded-2xl flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(6,182,212,0.5)] transform rotate-3">
+                <i data-lucide="file-text" class="w-12 h-12 text-slate-900 transform -rotate-3"></i>
+            </div>
+            <h1
+                class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+                Essay Feedback System
+            </h1>
+            <p class="text-xl md:text-2xl text-slate-300 mb-12 font-light">Automated and Instant Writing Analysis</p>
+            <div class="glass-panel px-8 py-4 rounded-full flex gap-8 text-slate-300 font-semibold shadow-lg">
+                <span>Omri</span>
+                <span class="text-cyan-400">&bull;</span>
+                <span>Alon</span>
+                <span class="text-cyan-400">&bull;</span>
+                <span>Oren</span>
+            </div>
+        </div>
+
+        <!-- Slide 1: Problem Definition -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-1">
+            <h3 class="text-4xl font-bold mb-10">Why For ?</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-t-red-500">
+                    <div class="flex items-center gap-4 mb-4 text-red-400">
+                        <i data-lucide="clock" class="w-8 h-8"></i>
+                        <h4 class="text-2xl font-bold">The Problem</h4>
+                    </div>
+                    <ul class="space-y-4 text-slate-300 text-lg">
+                        <li class="flex gap-3"><i data-lucide="x" class="text-red-500 mt-1"></i> Checking essays Manualy
+                            is boring and tedious.</li>
+                        <li class="flex gap-3"><i data-lucide="x" class="text-red-500 mt-1"></i> Human Feedback is often
+                            subjective and slow.</li>
+                        <li class="flex gap-3"><i data-lucide="x" class="text-red-500 mt-1"></i> When feedback takes too
+                            long, learning slows down.</li>
+                    </ul>
+                </div>
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-t-emerald-500">
+                    <div class="flex items-center gap-4 mb-4 text-emerald-400">
+                        <i data-lucide="check-circle" class="w-8 h-8"></i>
+                        <h4 class="text-2xl font-bold">The Target Audience</h4>
+                    </div>
+                    <ul class="space-y-4 text-slate-300 text-lg">
+                        <li class="flex gap-3"><i data-lucide="users" class="text-emerald-500 mt-1"></i>
+                            <b>Students:</b> Pre-check essays before submission.
+                        </li>
+                        <li class="flex gap-3"><i data-lucide="book-open" class="text-emerald-500 mt-1"></i>
+                            <b>Teachers:</b> Automate work of checking for essays.
+                        </li>
+                        <li class="flex gap-3"><i data-lucide="globe" class="text-emerald-500 mt-1"></i> <b>Writers:</b>
+                            Ensure basic English formatting standards.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: System Architecture -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-2">
+            <h3 class="text-4xl font-bold mb-10">High-Level Overview</h3>
+
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Frontend -->
+                <div class="glass-panel p-8 rounded-2xl w-full md:w-2/5 text-center">
+                    <div class="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="monitor" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Client (Frontend)</h4>
+                    <p class="text-slate-400 text-sm mb-4">Lightweight & Fast</p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-orange-400">HTML5</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-blue-400">CSS3</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-yellow-400">Vanilla
+                            JS</span>
+                    </div>
+                </div>
+
+                <!-- Arrow -->
+                <div class="flex flex-col items-center">
+                    <p class="text-xs text-cyan-400 font-mono mb-2">RESTful API (fetch)</p>
+                    <i data-lucide="arrow-right-left" class="w-10 h-10 text-slate-500"></i>
+                    <p class="text-xs text-cyan-400 font-mono mt-2">JSON / FormData</p>
+                </div>
+
+                <!-- Backend -->
+                <div class="glass-panel p-8 rounded-2xl w-full md:w-2/5 text-center">
+                    <div class="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="server" class="w-8 h-8 text-emerald-400"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2">Server (Backend)</h4>
+                    <p class="text-slate-400 text-sm mb-4">Scalable & Simply Mintnable</p>
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <span
+                            class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-emerald-400">FastAPI</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-blue-300">Python 3</span>
+                        <span class="px-3 py-1 bg-slate-800 rounded-md text-xs font-mono text-purple-400">Uvicorn</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Code Structure -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-3">
+            <h3 class="text-4xl font-bold mb-8">Code Structure</h3>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="flex-1 glass-panel p-6 rounded-2xl">
+                    <h4 class="text-lg font-bold text-cyan-400 mb-4 border-b border-slate-700 pb-2">Project Model</h4>
+                    <ul class="space-y-4 font-mono text-sm">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="folder-tree" class="w-5 h-5 text-slate-400 shrink-0"></i>
+                            <div>
+                                <span class="text-yellow-400">routers/</span>
+                                <p class="text-slate-400 text-xs font-sans mt-1">API Endpoints (/users, /analysis,
+                                    /essays)</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="folder-cog" class="w-5 h-5 text-slate-400 shrink-0"></i>
+                            <div>
+                                <span class="text-yellow-400">services/</span>
+                                <p class="text-slate-400 text-xs font-sans mt-1">Business Logic (TEXT checking logic,
+                                    STORAGE system.)</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="database" class="w-5 h-5 text-slate-400 shrink-0"></i>
+                            <div>
+                                <span class="text-yellow-400">DB/</span>
+                                <p class="text-slate-400 text-xs font-sans mt-1">Reliable storing of data in JSON files.
+                                </p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="flex-1 glass-panel p-6 rounded-2xl">
+                    <h4 class="text-lg font-bold text-emerald-400 mb-4 border-b border-slate-700 pb-2">Team Work</h4>
+                    <div class="space-y-4">
+                        <div class="bg-slate-800/50 p-3 rounded-lg border-l-4 border-blue-500">
+                            <h5 class="font-bold">Omri</h5>
+                            <p class="text-sm text-slate-400">USERS API (Registration & Auth )</p>
+                        </div>
+                        <div class="bg-slate-800/50 p-3 rounded-lg border-l-4 border-purple-500">
+                            <h5 class="font-bold">Oren</h5>
+                            <p class="text-sm text-slate-400">ESSAY analysis API (Core logic, algorithms, metrics)</p>
+                        </div>
+                        <div class="bg-slate-800/50 p-3 rounded-lg border-l-4 border-cyan-500">
+                            <h5 class="font-bold">Alon</h5>
+                            <p class="text-sm text-slate-400">DB API & UI (Routing, storage, interface)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Core Logic Walkthrough -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-4">
+            <h3 class="text-4xl font-bold mb-10">Core Logic</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div
+                    class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300">
+                    <div
+                        class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center mx-auto mb-4 text-blue-400">
+                        <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">Report General Metrics</h4>
+                    <p class="text-sm text-slate-400 mb-4">Automatically calculates total words and paragraphs, count
+                        parentheses and spaces etc.</p>
+                </div>
+
+                <div
+                    class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300">
+                    <div
+                        class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4 text-red-400">
+                        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">Structural Issues</h4>
+                    <p class="text-sm text-slate-400">Scans for missing paragraph punctuation, incorrect spacing around
+                        punctuation marks and much more..</p>
+                </div>
+
+                <div
+                    class="glass-panel p-6 rounded-2xl text-center transform hover:-translate-y-2 transition-transform duration-300">
+                    <div
+                        class="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center mx-auto mb-4 text-yellow-400">
+                        <i data-lucide="repeat" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-lg mb-2">Repeated Words</h4>
+                    <p class="text-sm text-slate-400">To detect and count that repeated words: Uses super fast and
+                        modern approach - (Hash Maps/Dictionaries).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Data Flow & Database -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-5">
+            <h3 class="text-4xl font-bold mb-10">Data Flow & Database</h3>
+
+            <div class="space-y-6">
+                <div class="glass-panel p-8 rounded-2xl flex items-start gap-6">
+                    <div class="bg-indigo-500/20 p-4 rounded-xl text-indigo-400 mt-1">
+                        <i data-lucide="hard-drive" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-bold text-indigo-300 mb-2">Local File System</h4>
+                        <p class="text-slate-300 leading-relaxed">Instead of using a heavy relational database for our
+                            MVP, we moved for a lightweight and reliable approach. By using Python's built in lib to
+                            perform <code class="bg-slate-800 text-pink-400 px-1 rounded">CRUD</code> operations, saving
+                            user profiles, essays, and reports directly as <b>JSON</b> files.</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl flex items-start gap-6">
+                    <div class="bg-teal-500/20 p-4 rounded-xl text-teal-400 mt-1">
+                        <i data-lucide="key" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-2xl font-bold text-teal-300 mb-2">Auth & Client State</h4>
+                        <p class="text-slate-300 leading-relaxed">Authentication: once the server validates the login
+                            credentials, the frontend browser stores the User ID in memory (<b>Client-Side State
+                                Management</b>). This allows us to securely attach all uploaded essays to the correct
+                            author during the session.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Technical Challenges -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-6">
+            <h3 class="text-4xl font-bold mb-10">Technical Challenges & Solutions</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-slate-700/30">
+                        <i data-lucide="file-code" class="w-32 h-32"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-4 relative z-10">Payload Management</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed relative z-10">
+                        <b>Challenge:</b> Sending a physical <code class="text-orange-400">.txt</code> file alongside
+                        text data to the backend.<br><br>
+                        <b>Solution:</b> We utilized the built-in <code class="text-blue-400">FormData</code> object in
+                        JavaScript to package the payload as <code class="text-emerald-400">multipart/form-data</code>.
+                        On the backend, we configured FastAPI to intercept this using the <code
+                            class="text-purple-400">Form(...)</code> dependency, successfully bridging the gap between
+                        client and server.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-slate-700/30">
+                        <i data-lucide="mouse-pointer-click" class="w-32 h-32"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-4 relative z-10">UI/UX Synchronization</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed relative z-10">
+                        <b>Challenge:</b> Users had to manually copy their generated Essay ID and paste it to get a
+                        report.<br><br>
+                        <b>Solution:</b> We built an auto-fill mechanism. Upon successful upload, the frontend
+                        intercepts the ID, injects it directly into the "Get Report" input field, and triggers a subtle
+                        CSS box-shadow animation to visually guide the user's attention.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Live Demo -->
+        <div class="slide flex-col items-center justify-center max-w-5xl w-full h-full text-center" id="slide-7">
+            <!-- Кнопка вызова Видео Модалки -->
+            <div class="relative mb-8 cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                onclick="openVideoModal()">
+                <div class="absolute inset-0 bg-cyan-500 blur-[50px] opacity-20 rounded-full animate-pulse"></div>
+                <div
+                    class="w-32 h-32 bg-slate-800 border border-slate-600 rounded-full flex items-center justify-center relative z-10 shadow-lg hover:shadow-cyan-500/50 transition-shadow">
+                    <i data-lucide="play" class="w-16 h-16 text-cyan-400 ml-2"></i>
+                </div>
+            </div>
+            <h2 class="text-sm font-bold text-cyan-400 uppercase tracking-widest mb-4">It's time!</h2>
+            <h3 class="text-6xl font-extrabold mb-8 text-white">Live Demo</h3>
+
+            <div class="flex flex-wrap justify-center gap-4 text-slate-400 font-medium">
+                <span class="glass-panel px-4 py-2 rounded-lg flex items-center gap-2"><i data-lucide="log-in"
+                        class="w-4 h-4"></i> Auth</span>
+                <span class="text-slate-600 mt-2">→</span>
+                <span class="glass-panel px-4 py-2 rounded-lg flex items-center gap-2"><i class="w-4 h-4"
+                        data-lucide="upload-cloud"></i> Upload</span>
+                <span class="text-slate-600 mt-2">→</span>
+                <span class="glass-panel px-4 py-2 rounded-lg flex items-center gap-2"><i class="w-4 h-4"
+                        data-lucide="search"></i> Auto-fill</span>
+                <span class="text-slate-600 mt-2">→</span>
+                <span
+                    class="glass-panel px-4 py-2 rounded-lg text-cyan-400 border border-cyan-500/30 flex items-center gap-2"><i
+                        class="w-4 h-4" data-lucide="file-line-chart"></i> View Report</span>
+            </div>
+        </div>
+
+        <!-- Slide 8: Future Improvements -->
+        <div class="slide flex-col justify-center max-w-5xl w-full h-full" id="slide-8">
+            <h3 class="text-4xl font-bold mb-10">Business Value & Future Improvements</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="text-2xl font-bold text-emerald-400 mb-6 flex items-center gap-3">
+                        <i data-lucide="trending-up" class="w-6 h-6"></i> Practical Value
+                    </h4>
+                    <ul class="space-y-6 text-slate-300">
+                        <li class="flex gap-4">
+                            <div class="bg-slate-800 p-2 rounded-lg h-fit text-emerald-400"><i
+                                    data-lucide="hourglass"></i></div>
+                            <div>
+                                <strong class="text-white">Saves Time:</strong> Eliminates hours of manual technical
+                                checking for teachers.
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="bg-slate-800 p-2 rounded-lg h-fit text-emerald-400"><i data-lucide="target"></i>
+                            </div>
+                            <div>
+                                <strong class="text-white">Always Fair:</strong> It provides clear feedback 24 hours a
+                                day, without getting tired or having personal feelings.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-2xl font-bold text-cyan-400 mb-6 flex items-center gap-3">
+                        <i data-lucide="rocket" class="w-6 h-6"></i> Future Roadmap
+                    </h4>
+                    <ul class="space-y-6 text-slate-300">
+                        <li class="flex gap-4">
+                            <div class="bg-slate-800 p-2 rounded-lg h-fit text-cyan-400"><i data-lucide="database"></i>
+                            </div>
+                            <div>
+                                <strong class="text-white">Database Migration:</strong> Upgrade from local JSON files to
+                                a relational DB like PostgreSQL.
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="bg-slate-800 p-2 rounded-lg h-fit text-cyan-400"><i data-lucide="lock"></i>
+                            </div>
+                            <div>
+                                <strong class="text-white">Advanced Security:</strong> Implement JWT (JSON Web Tokens)
+                                for robust session management.
+                            </div>
+                        </li>
+                        <li class="flex gap-4">
+                            <div class="bg-slate-800 p-2 rounded-lg h-fit text-cyan-400"><i
+                                    data-lucide="brain-circuit"></i></div>
+                            <div>
+                                <strong class="text-white">AI Integration:</strong> Connect external LLM APIs for deep
+                                semantic text analysis (meaning, tone, flow).
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Всплывающее окно (Modal) для ЛОКАЛЬНОГО ВИДЕО -->
+    <div id="videoModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/95 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-slate-700 transform scale-95 transition-transform duration-300"
+            id="videoModalContent">
+
+            <!-- Кнопка закрытия -->
+            <button onclick="closeVideoModal()"
+                class="absolute top-4 right-4 z-20 p-2 bg-slate-800/80 hover:bg-red-500 rounded-full text-white transition-colors">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+
+            <!-- Стандартный HTML5 Видеоплеер -->
+            <!-- Загрузит файл demo.mov или demo.mp4 из той же папки -->
+            <video id="localVideoPlayer" class="w-full h-full object-contain bg-black" controls playsinline>
+                <source src="CyberPro_Presentation.mp4" type="video/mp4">
+                <source src="demo.mp4" type="video/quicktime">
+                Your browser do not support teg video. Please, update browser...
+            </video>
+
+        </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <footer class="w-full p-6 flex justify-between items-center z-10 absolute bottom-0">
+        <div class="text-slate-500 font-mono text-sm" id="slide-counter">1 / 9</div>
+
+        <div class="flex gap-4">
+            <button onclick="prevSlide()"
+                class="p-3 rounded-full bg-slate-800 hover:bg-slate-700 text-white transition-colors disabled:opacity-50"
+                id="btn-prev">
+                <i data-lucide="chevron-left" class="w-6 h-6"></i>
+            </button>
+            <button onclick="nextSlide()"
+                class="p-3 rounded-full bg-cyan-600 hover:bg-cyan-500 text-white transition-colors disabled:opacity-50"
+                id="btn-next">
+                <i data-lucide="chevron-right" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Progress Bar -->
+    <div class="absolute bottom-0 left-0 h-1 bg-slate-800 w-full z-20">
+        <div id="progress-bar" class="h-full bg-cyan-500 transition-all duration-300" style="width: 11.11%;"></div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons()
+
+        // Presentation Logic
+        let currentSlide = 0
+        const slides = document.querySelectorAll('.slide')
+        const totalSlides = slides.length
+
+        const counterEl = document.getElementById('slide-counter')
+        const progressEl = document.getElementById('progress-bar')
+        const btnPrev = document.getElementById('btn-prev')
+        const btnNext = document.getElementById('btn-next')
+
+        function updateUI() {
+            // Hide all slides
+            slides.forEach(slide => slide.classList.remove('active'))
+            // Show current slide
+            slides[currentSlide].classList.add('active')
+
+            // Update counter and progress
+            counterEl.innerText = `${currentSlide + 1} / ${totalSlides}`
+            progressEl.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`
+
+            // Button states
+            btnPrev.disabled = currentSlide === 0
+            btnNext.disabled = currentSlide === totalSlides - 1
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++
+                updateUI()
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--
+                updateUI()
+            }
+        }
+
+        // --- ЛОГИКА ДЛЯ ЛОКАЛЬНОГО ВИДЕО ---
+        function openVideoModal() {
+            const modal = document.getElementById('videoModal')
+            const content = document.getElementById('videoModalContent')
+            const video = document.getElementById('localVideoPlayer')
+
+            modal.classList.remove('pointer-events-none')
+            modal.classList.add('opacity-100')
+            content.classList.remove('scale-95')
+            content.classList.add('scale-100')
+
+            // Опционально: можно заставить видео воспроизводиться автоматически при открытии
+            video.play().catch(e => console.log("Автозапуск заблокирован браузером:", e))
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal')
+            const content = document.getElementById('videoModalContent')
+            const video = document.getElementById('localVideoPlayer')
+
+            // Убираем модалку
+            modal.classList.remove('opacity-100')
+            modal.classList.add('pointer-events-none')
+            content.classList.remove('scale-100')
+            content.classList.add('scale-95')
+
+            // Ставим локальное видео на паузу
+            video.pause()
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('videoModal')
+            const isModalOpen = modal.classList.contains('opacity-100')
+
+            if (isModalOpen) {
+                if (e.key === 'Escape') closeVideoModal() // Закрываем по Esc
+                return // Игнорируем стрелки, пока видео открыто
+            }
+
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide()
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide()
+            }
+        })
+
+        // Initialize
+        updateUI();
+    </script>
+</body>
+
+</html>

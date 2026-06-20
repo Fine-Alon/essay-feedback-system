@@ -1,0 +1,23 @@
+{
+    "essay_id": "d777bd83-d70f-4d14-ad31-9a2fd30506ea",
+    "user_name": "rrr",
+    "original_text": "adsfasf sdfasdfasdf,,fsadfs f f,s,df,f, f sdfasdfsd",
+    "status": "completed",
+    "analysis_results": {
+        "general_metrics": {
+            "total_words": 6,
+            "total_paragraphs": 1,
+            "meets_minimum_length": false
+        },
+        "structural_issues_counters": {
+            "double_spaces": 0,
+            "missing_space_after_punctuation": 4,
+            "space_before_punctuation": 0,
+            "empty_lines": 0,
+            "missing_paragraph_punctuation": 1
+        },
+        "repeated_words_analysis": {
+            "f": 4
+        }
+    }
+}
