@@ -1,0 +1,21 @@
+{
+    "essay_id": "92439bea-d3f9-4a8f-8939-302bc02adb2d",
+    "user_name": "qwe",
+    "original_text": "fajshfakshf,, ,f,sdfsdf. \r\n\r\ndafga,g,, ,,,dsfsagadf Fsd,fs ,   ,,, sdf",
+    "status": "completed",
+    "analysis_results": {
+        "general_metrics": {
+            "total_words": 8,
+            "total_paragraphs": 2,
+            "meets_minimum_length": false
+        },
+        "structural_issues_counters": {
+            "double_spaces": 1,
+            "missing_space_after_punctuation": 5,
+            "space_before_punctuation": 4,
+            "empty_lines": 0,
+            "missing_paragraph_punctuation": 1
+        },
+        "repeated_words_analysis": {}
+    }
+}

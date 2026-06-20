@@ -1,0 +1,25 @@
+{
+    "essay_id": "1e51dd89-4285-4ace-b963-32e2a0131438",
+    "user_name": "Aviv",
+    "original_text": "בלון גדול בלון קטן בלון אדום בלון לבן בלון גדול בלון קטן בלון אדום בלון לבן מכשכש בזנבו ואומר הב הב מי זה? הכלבלב מפרח לפרח הוא עובר מי זה? פרפר בלון גדול.... שט לו באגם וזה ברור מה זה? ברבור מנתר ומקפץ כזה שובב מי זה? הארנב בלון גדול.... כשהתינוק בוכה אז אבא מתרוצץ ושם לו בפה מוצץ וכשאותך אני מאוד מאוד אוהב אז אני נותן לך לב בלון גדול....",
+    "status": "completed",
+    "analysis_results": {
+        "general_metrics": {
+            "total_words": 71,
+            "total_paragraphs": 1,
+            "meets_minimum_length": true
+        },
+        "structural_issues_counters": {
+            "double_spaces": 0,
+            "missing_space_after_punctuation": 0,
+            "space_before_punctuation": 0,
+            "empty_lines": 0,
+            "missing_paragraph_punctuation": 0
+        },
+        "repeated_words_analysis": {
+            "בלון": 11,
+            "גדול": 5,
+            "זה": 4
+        }
+    }
+}
